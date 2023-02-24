@@ -21,7 +21,7 @@ func main() {
 
 	//op := trace.FromContext(ctx, "VMPathNameAsURL")
 
-	topctx, cancel := context.WithTimeout(context.TODO(), 60*time.Second)
+	topctx, cancel := context.WithTimeout(context.TODO(), 300*time.Second)
 	defer cancel()
 	op := trace.NewOperation(topctx, "logon")
 
