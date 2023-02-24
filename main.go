@@ -55,21 +55,32 @@ func main() {
 			fmt.Println(dc.InventoryPath)
 		}
 
+		fmt.Println("Sleeping for 30 seconds...")
 		time.Sleep(30 * time.Second)
 
 		clusters, err := finder.ClusterComputeResourceList(ctx, "./...")
+		if err != nil {
+			fmt.Fprint(os.Stderr, err)
+		}
 
 		for _, c := range clusters {
 			fmt.Println(c.Name())
 			fmt.Println(c.InventoryPath)
 		}
+
+		fmt.Println("Sleeping for 30 seconds...")
 		time.Sleep(30 * time.Second)
 
 		virtualMachines, err := finder.VirtualMachineList(ctx, "./...")
+		if err != nil {
+			fmt.Fprint(os.Stderr, err)
+		}
+
 		for _, vm := range virtualMachines {
 			fmt.Println(vm.Name())
 			fmt.Println(vm.InventoryPath)
 		}
+		fmt.Println("Sleeping for 300 seconds...")
 		time.Sleep(300 * time.Second)
 	}
 }
