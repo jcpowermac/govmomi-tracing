@@ -48,10 +48,13 @@ func main() {
 	}
 
 	for {
+		loopctx, cancel := context.WithTimeout(context.TODO(), 600*time.Second)
 		var datacenterPath string
 		finder := find.NewFinder(c.Client, true)
 
-		op = trace.NewOperation(topctx, "DatacenterList")
+		op = trace.NewOperation(loopctx, "DatacenterList")
+
+		fmt.Println(op.ID())
 		datacenters, err := finder.DatacenterList(op.Context, "./...")
 		if err != nil {
 			fmt.Fprint(os.Stderr, err)
@@ -67,7 +70,8 @@ func main() {
 		fmt.Println("Sleeping for 30 seconds...")
 		time.Sleep(30 * time.Second)
 
-		op = trace.NewOperation(topctx, "ClusterComputeResourceList")
+		op = trace.NewOperation(loopctx, "ClusterComputeResourceList")
+		fmt.Println(op.ID())
 		clusters, err := finder.ClusterComputeResourceList(op.Context, "./...")
 		if err != nil {
 			fmt.Fprint(os.Stderr, err)
@@ -81,8 +85,9 @@ func main() {
 		fmt.Println("Sleeping for 30 seconds...")
 		time.Sleep(30 * time.Second)
 
-		op = trace.NewOperation(topctx, "VirtualMachineList")
-		virtualMachines, err := finder.VirtualMachineList(op.Context, datacenterPath+"/vm/")
+		op = trace.NewOperation(loopctx, "VirtualMachineList")
+		fmt.Println(op.ID())
+		virtualMachines, err := finder.VirtualMachineList(op.Context, datacenterPath+"/...")
 		if err != nil {
 			fmt.Fprint(os.Stderr, err)
 		}
@@ -92,6 +97,7 @@ func main() {
 			fmt.Println(vm.InventoryPath)
 		}
 		fmt.Println("Sleeping for 300 seconds...")
+		cancel()
 		time.Sleep(300 * time.Second)
 	}
 }
